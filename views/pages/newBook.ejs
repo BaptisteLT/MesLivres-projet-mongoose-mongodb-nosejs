@@ -1,0 +1,38 @@
+<%- include('../template/header.ejs') %>
+
+
+<div class="container d-flex justify-content-center">
+    <form action="/new-book" method="post">
+        <div class="mb-3">
+          <label for="Title" class="form-label">Titre</label>
+          <input type="text" name="Title" class="form-control" id="Title" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="Auteur" class="form-label">Auteur</label>
+            <input type="text" name="Auteur" class="form-control" id="Auteur" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="Type" class="form-label">Type</label>
+            <input type="text" name="Type" class="form-control" id="Type" placeholder="Ex: Policier, Aventure, etc." required>
+          </div>
+
+          <div class="mb-3">
+            <label for="Description" class="form-label">Description</label>
+            <input type="text" name="Description" class="form-control" id="Description" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="nbPages" class="form-label">Nombre de pages</label>
+            <input type="number" name="nbPages" min="0" class="form-control" id="nbPages" required>
+          </div>
+
+        <button type="submit" class="btn btn-primary">Créer le nouveau livre</button>
+      </form>
+</div>
+
+
+
+
+<%- include('../template/footer.ejs') %>

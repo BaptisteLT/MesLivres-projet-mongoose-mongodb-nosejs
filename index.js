@@ -23,107 +23,125 @@ app.listen(port,function(){
     console.log(`Serveur Express lancé sur le port : ${port}`)
 })
 
+//Pour voir un livre en détail
 app.get('/view-book/:id', async function(request, response) {
 
     await mongoose.connect('mongodb://localhost:27017/books');
 
-
     const book = await Book.findById(request.params.id)
 
-    console.log(book);
-
-    mongoose.connection.close()
+    mongoose.connection.close();
 
     const data = {book:book};
+
     response.render('pages/viewBook',data);
 });
 
+//Pour supprimer
+app.get('/delete-book/:id', async function(request, response) {
 
+    await mongoose.connect('mongodb://localhost:27017/books');
+
+    const book = await Book.deleteOne({ _id: request.params.id })
+
+    mongoose.connection.close();
+
+    response.redirect('/');
+});
+
+
+//Pour créer un nouveau livre
+app.get('/new-book', function(request, response) {
+    response.render('pages/newBook');
+});
+
+app.post('/new-book', async function(request, response) {
+
+    let title = request.body.Title;
+    let auteur = request.body.Auteur;
+    let type = request.body.Type;
+    let description = request.body.Description;
+    let nbPages = request.body.nbPages;
+
+    //On enregistre que si toutes les infos sont pas vides
+    if(title!=''&&auteur!=''&&type!=''&&description!=''&&nbPages!='')
+    {
+        await mongoose.connect('mongodb://localhost:27017/books');
+
+        const book = new Book({
+            titre: title,
+            auteur: auteur,
+            type: type,
+            description: description,
+            nbPages: nbPages,
+        })
+        book.save()
+        .catch(function(error){
+            console.log(error);
+        })
+        .finally(function() {
+            mongoose.connection.close();
+        });
+    }
+
+    response.redirect('/');
+});
+
+//Pour modifier un livre (vue seulement)
+app.get('/modify-book/:id', async function(request, response) {
+    await mongoose.connect('mongodb://localhost:27017/books');
+
+    const book = await Book.findById(request.params.id)
+
+    mongoose.connection.close();
+
+    const data = {book:book};
+
+    response.render('pages/modifyBook',data);
+});
+
+//Pour modifier un livre (avec un post)
+app.get('/modify-book/:id', async function(request, response) {
+
+    let title = request.body.Title;
+    let auteur = request.body.Auteur;
+    let type = request.body.Type;
+    let description = request.body.Description;
+    let nbPages = request.body.nbPages;
+
+    //On enregistre que si toutes les infos sont pas vides
+    if(title!=''&&auteur!=''&&type!=''&&description!=''&&nbPages!='')
+    {
+        await mongoose.connect('mongodb://localhost:27017/books');
+
+        let book = await Book.findOneAndUpdate({
+            "_id": request.params.id,}, 
+            { $set: { title: title, auteur: auteur, type: type, description: description, nbPages: nbPages } 
+        })
+        .exec()
+        .catch(function(error){
+            console.log(error);
+        })
+        .finally(function() {
+            mongoose.connection.close();
+        });
+    }
+
+    response.redirect('/');
+});
+
+
+
+
+//Pour voir tous les livres
 app.get('/', async function(request, response) {
 
     await mongoose.connect('mongodb://localhost:27017/books');
 
-
-    /*const book = new Book({
-        titre: 'Les 4 animaux',
-        auteur: 'Baptiste LT',
-        type: 'Thriller',
-        nbPages: 95,
-    })
-    book.save()
-        .then((result)=>{
-            //Logiquement redirect vers la page avec l'ID
-            response.send(result)
-        })
-        .catch((err)=>{
-            console.log(err)
-        });
-*/
     const books = await Book.find({});
-
-
 
     mongoose.connection.close()
 
     const data = {books:books};
     response.render('pages/home',data);
 });
-
-
-
-
-
-async function main(){
-    try
-    {
-        await mongoose.connect('mongodb://localhost:27017/books');
-
-        //const users = await User.find({nom: 'Cauchon'});
-        const users = await User.find({$or:[
-            { age: {$gte:20} },
-            { nom: 'Cauchon' }
-        ]
-            
-        });
-        
-        const users2 = await User.find({
-            age: { $gt: 50},
-            $or: [
-                { prenom:"Bernard" },
-                { prenom:"Marina"}
-            ]
-        }).select('nom prenom')
-
-        console.log(users2);
-
- 
-        console.log("connexion ok !");
-
-        /*const bernard = new User({
-            email: 'toto@toto.fr',
-            prenom: 'Bernard',
-            nom: 'Cauchon',
-            age: 54,
-        })*/
-
-
-
-        /*
-        const marina = await User.create({
-            email: 'toto@tfffotffo.frf',
-            prenom: 'Bernard',
-            nom: 'Cauchon',
-            age: 54,
-        })
-        */
-
-        //console.log(bernard);
-        //await bernard.save();
-        mongoose.disconnect();
-    }
-    catch(error){
-        console.log(error);
-    }
-}
-
-main();

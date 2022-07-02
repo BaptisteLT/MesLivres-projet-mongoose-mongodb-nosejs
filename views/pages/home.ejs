@@ -8,8 +8,8 @@
                     <h5 class="card-title"><%= books[i].titre %></h5>
                     <h6 class="card-subtitle mb-2 text-muted"><%= books[i].auteur %></h6>
                     <p class="card-text"><%= books[i].type %> de <%= books[i].nbPages %> pages</p>
-                    <a href="#" class="card-link">Supprimer</a>
-                    <a href="#" class="card-link">Modifier</a>
+                    <a href="/delete-book/<%= books[i].id %>" class="card-link">Supprimer</a>
+                    <a href="/modify-book/<%= books[i].id %>" class="card-link">Modifier</a>
                     <a href="/view-book/<%= books[i].id %>" class="card-link">Voir</a>
                 </div>
             </div>
