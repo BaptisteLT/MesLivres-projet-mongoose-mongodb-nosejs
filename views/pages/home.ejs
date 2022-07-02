@@ -1,5 +1,5 @@
 <%- include('../template/header.ejs') %>
-
+<div class="container">
     <div class="row">
     <% for(var i=0; i<books.length; i++) {%>
         <div class="col mb-5">
@@ -10,11 +10,11 @@
                     <p class="card-text"><%= books[i].type %> de <%= books[i].nbPages %> pages</p>
                     <a href="#" class="card-link">Supprimer</a>
                     <a href="#" class="card-link">Modifier</a>
-                    <a href="#" class="card-link">Voir</a>
+                    <a href="/view-book/<%= books[i].id %>" class="card-link">Voir</a>
                 </div>
             </div>
         </div>
      <% } %>
     </div>
-
+</div>
 <%- include('../template/footer.ejs') %>

@@ -23,6 +23,21 @@ app.listen(port,function(){
     console.log(`Serveur Express lancé sur le port : ${port}`)
 })
 
+app.get('/view-book/:id', async function(request, response) {
+
+    await mongoose.connect('mongodb://localhost:27017/books');
+
+
+    const book = await Book.findById(request.params.id)
+
+    console.log(book);
+
+    mongoose.connection.close()
+
+    const data = {book:book};
+    response.render('pages/viewBook',data);
+});
+
 
 app.get('/', async function(request, response) {
 
@@ -53,6 +68,10 @@ app.get('/', async function(request, response) {
     const data = {books:books};
     response.render('pages/home',data);
 });
+
+
+
+
 
 async function main(){
     try

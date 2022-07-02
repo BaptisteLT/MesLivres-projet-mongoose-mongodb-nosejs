@@ -5,6 +5,7 @@ const booksSchema = new Schema({
     titre:{type:String, required: true},
     auteur:{type: String, required: true},
     type:{type: String, required: true},
+    description:{type: String, required: true},
     nbPages: {type: Number, min: 0, required: true},
 },
 {
