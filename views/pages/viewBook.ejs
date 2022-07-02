@@ -12,7 +12,7 @@
             <div class="mb-1 text-muted"><%= book.type %> de <%= book.nbPages %> pages</div>
             <p class="card-text mb-auto">Description: <%= book.description %></p>
             <a href="/delete-book/<%= book.id %>" class="card-link">Supprimer</a>
-            <a href="/modify-book/<%= books[i].id %>" class="card-link">Modifier</a>
+            <a href="/modify-book/<%= book.id %>" class="card-link">Modifier</a>
         </div>
     </div>
 </div>

@@ -30,7 +30,7 @@ app.get('/view-book/:id', async function(request, response) {
 
     const book = await Book.findById(request.params.id)
 
-    mongoose.connection.close();
+    mongoose.disconnect();
 
     const data = {book:book};
 
@@ -44,7 +44,7 @@ app.get('/delete-book/:id', async function(request, response) {
 
     const book = await Book.deleteOne({ _id: request.params.id })
 
-    mongoose.connection.close();
+    mongoose.disconnect();
 
     response.redirect('/');
 });
@@ -55,6 +55,7 @@ app.get('/new-book', function(request, response) {
     response.render('pages/newBook');
 });
 
+//TODO Lorsqu'on fait deux ajouts ça met une erreur Server is closed
 app.post('/new-book', async function(request, response) {
 
     let title = request.body.Title;
@@ -80,7 +81,7 @@ app.post('/new-book', async function(request, response) {
             console.log(error);
         })
         .finally(function() {
-            mongoose.connection.close();
+            mongoose.disconnect();
         });
     }
 
@@ -93,7 +94,7 @@ app.get('/modify-book/:id', async function(request, response) {
 
     const book = await Book.findById(request.params.id)
 
-    mongoose.connection.close();
+    mongoose.disconnect();
 
     const data = {book:book};
 
@@ -101,7 +102,7 @@ app.get('/modify-book/:id', async function(request, response) {
 });
 
 //Pour modifier un livre (avec un post)
-app.get('/modify-book/:id', async function(request, response) {
+app.post('/modify-book/:id', async function(request, response) {
 
     let title = request.body.Title;
     let auteur = request.body.Auteur;
@@ -109,6 +110,7 @@ app.get('/modify-book/:id', async function(request, response) {
     let description = request.body.Description;
     let nbPages = request.body.nbPages;
 
+    //TODO Lorsqu'on fait deux modifications ça met une erreur Server is closed
     //On enregistre que si toutes les infos sont pas vides
     if(title!=''&&auteur!=''&&type!=''&&description!=''&&nbPages!='')
     {
@@ -123,7 +125,7 @@ app.get('/modify-book/:id', async function(request, response) {
             console.log(error);
         })
         .finally(function() {
-            mongoose.connection.close();
+            mongoose.disconnect();
         });
     }
 
@@ -140,7 +142,7 @@ app.get('/', async function(request, response) {
 
     const books = await Book.find({});
 
-    mongoose.connection.close()
+    mongoose.disconnect()
 
     const data = {books:books};
     response.render('pages/home',data);
