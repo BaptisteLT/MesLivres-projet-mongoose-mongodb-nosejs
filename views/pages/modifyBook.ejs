@@ -2,7 +2,7 @@
 
 
 <div class="container d-flex justify-content-center">
-    <form action="/new-book" method="post">
+    <form action="/modify-book/<%= book.id %>" method="post">
         <div class="mb-3">
           <label for="Title" class="form-label">Titre</label>
           <input type="text" value="<%= book.titre %>" name="Title" class="form-control" id="Title" required>
